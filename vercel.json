@@ -1,0 +1,10 @@
+{
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "crons": [
+    {
+      "path": "/api/trigger?token=${CRON_SECRET}",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}
