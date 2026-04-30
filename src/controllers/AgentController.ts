@@ -28,7 +28,7 @@ export class AgentController {
     console.log(`[AgentController] Generated content on topic: "${generated.topic}"`);
 
     // Step 2: Format the Telegram message
-    const message = this.formatMessage(generated.topic, generated.content, generated.hashtags);
+    const message = this.formatMessage(generated.topic, generated.content, generated.hashtags, generated.image_prompt);
 
     // Step 3: Send via notifier
     await this.notifier.sendMessage(message);
@@ -40,7 +40,7 @@ export class AgentController {
   /**
    * Formats the generated content into a Telegram-ready Markdown message.
    */
-  private formatMessage(topic: string, content: string, hashtags: string[]): string {
+  private formatMessage(topic: string, content: string, hashtags: string[], image_prompt: string): string {
     const hashtagLine = hashtags.map((tag) => (tag.startsWith('#') ? tag : `#${tag}`)).join(' ');
 
     return [
@@ -50,6 +50,8 @@ export class AgentController {
       ``,
       `───────────────`,
       hashtagLine,
+      `───────────────`,
+      image_prompt,
       ``,
       `🤖 _Powered by AI Content Agent_`,
     ].join('\n');

@@ -8,6 +8,7 @@ export interface GeneratedContent {
   content: string;
   /** Suggested hashtags for the post */
   hashtags: string[];
+  image_prompt: string;
 }
 
 /**
