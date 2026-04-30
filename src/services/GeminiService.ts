@@ -7,6 +7,7 @@ import type { INewsService } from '../interfaces/INewsService';
  * A random field is selected on each invocation.
  */
 const FIELDS: string[] = [
+  // Original
   'Quantum Computing',
   'Biotechnology',
   'Astrophysics',
@@ -17,6 +18,38 @@ const FIELDS: string[] = [
   'Space Exploration',
   'Neurotechnology',
   'Materials Science',
+  // Expanded
+  'Generative AI & Large Language Models',
+  'CRISPR & Gene Editing',
+  'Sustainable Agriculture Tech',
+  'Fusion Energy',
+  '6G & Advanced Wireless',
+  'Cybersecurity & Encryption',
+  'Autonomous Vehicles',
+  '3D Printing & Additive Manufacturing',
+  'Wearable Health Tech',
+  'Ocean & Climate Tech',
+  'Brain-Computer Interfaces',
+  'Edge Computing',
+  'Synthetic Biology',
+  'Dark Matter & Dark Energy Research',
+  'Exoplanet Discovery',
+  'Lab-grown Meat & Food Tech',
+  'Biodegradable Plastics',
+  'Smart Cities & IoT',
+  'Augmented Reality & Metaverse',
+  'Drone & Aerial Tech',
+  'Nuclear Battery & Microreactors',
+  'Carbon Capture & Sequestration',
+  'Bionic Prosthetics',
+  'DNA Data Storage',
+  'Space Tourism',
+  'Clean Hydrogen Tech',
+  'Vertical Farming',
+  'Digital Twins',
+  'Blockchain & Web3',
+  "SOC & CHIP Inductry",
+  "Electrinic Devices",
 ];
 
 /**
@@ -70,8 +103,8 @@ export class GeminiService implements IGenerativeAiService {
   async generateContent(): Promise<GeneratedContent> {
     const randomField = FIELDS[Math.floor(Math.random() * FIELDS.length)];
     //const model = 'gemini-2.5-flash';
-    //const model = 'gemini-3-flash-preview';
-    const model = 'gemini-2.5-flash-lite';
+    const model = 'gemini-3-flash-preview';
+    //const model = 'gemini-2.5-flash-lite';
 
     console.log(`[GeminiService] Selected field: "${randomField}"`);
 

@@ -3,8 +3,8 @@
   "outputDirectory": ".",
   "crons": [
     {
-      "path": "/api/trigger?token=${CRON_SECRET}",
-      "schedule": "0 9 * * *"
+      "path": "/api/trigger?token=CRON_SECRET_123",
+      "schedule": "0 5 * * *"
     }
   ]
 }
