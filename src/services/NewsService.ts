@@ -1,15 +1,16 @@
 import type { INewsService, NewsArticle } from '../interfaces/INewsService';
+import * as cheerio from 'cheerio';
 
 /**
- * Fetches latest news using Google News RSS feeds.
- * No API key required — parses the public RSS XML endpoint.
+ * Fetches latest news using Google News RSS feeds, and extracts full text.
+ * No API key required — parses the public RSS XML endpoint and fetches the articles.
  */
 export class GoogleNewsRssService implements INewsService {
   private readonly baseUrl = 'https://news.google.com/rss/search';
 
   async fetchNews(query: string, count: number = 5): Promise<NewsArticle[]> {
-    // Append "when:7d" to restrict results to the past 7 days
-    const timeFilteredQuery = `${query} when:7d`;
+    // Append "when:1d" to restrict results to the past 24 hours only, ensuring fresh topics
+    const timeFilteredQuery = `${query} when:1d`;
     const url = `${this.baseUrl}?q=${encodeURIComponent(timeFilteredQuery)}&hl=en&gl=US&ceid=US:en`;
 
     console.log(`[NewsService] Fetching news for query: "${query}"`);
@@ -25,7 +26,52 @@ export class GoogleNewsRssService implements INewsService {
     }
 
     const xml = await response.text();
-    return this.parseRss(xml, count);
+    const articles = this.parseRss(xml, count);
+
+    // Concurrently fetch the full text for each article
+    console.log(`[NewsService] Fetching full article contents...`);
+    await Promise.all(
+      articles.map(async (article) => {
+        if (article.url) {
+          article.fullText = await this.fetchArticleContent(article.url);
+        }
+      })
+    );
+
+    return articles;
+  }
+
+  /**
+   * Fetches the actual article URL and extracts paragraphs using Cheerio.
+   */
+  private async fetchArticleContent(url: string): Promise<string> {
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(5000), // Prevent hanging on slow sites
+      });
+      if (!response.ok) return '';
+      
+      const html = await response.text();
+      const $ = cheerio.load(html);
+      
+      // Strip out non-content elements
+      $('script, style, nav, header, footer, aside, .ad, .advertisement').remove();
+      
+      let text = '';
+      $('p').each((_, el) => {
+        const pText = $(el).text().trim();
+        if (pText.length > 20) {
+          text += pText + '\\n\\n';
+        }
+      });
+      
+      // Limit to 3000 chars to avoid blowing up the Gemini prompt limits
+      return text.trim().slice(0, 3000);
+    } catch (error) {
+      console.warn(`[NewsService] Failed to fetch article content for ${url}:`, error instanceof Error ? error.message : String(error));
+      return '';
+    }
   }
 
   /**
@@ -58,10 +104,12 @@ export class GoogleNewsRssService implements INewsService {
           publishedAt: pubDate || '',
           url: link || '',
         });
+
       }
     }
 
     console.log(`[NewsService] Parsed ${articles.length} articles`);
+
     return articles;
   }
 

@@ -12,6 +12,8 @@ export interface NewsArticle {
   publishedAt: string;
   /** Direct URL to the article */
   url: string;
+  /** Full extracted text content of the article, if available */
+  fullText?: string;
 }
 
 /**
