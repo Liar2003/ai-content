@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Content Agent</title>
+  <meta name="description" content="A serverless AI agent curating the latest science and technology news for Myanmar.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #050505;
+      --text-main: #f8f9fa;
+      --text-muted: #a1a1aa;
+      --accent-glow: rgba(99, 102, 241, 0.4);
+      --accent-solid: #6366f1;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background animated glows */
+    .bg-glow {
+      position: absolute;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      animation: pulse 10s infinite alternate ease-in-out;
+      filter: blur(80px);
+      opacity: 0.5;
+    }
+
+    .bg-glow:nth-child(2) {
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 60%);
+      top: 0;
+      left: 80%;
+      animation-duration: 15s;
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.7; }
+    }
+
+    main {
+      width: 90%;
+      max-width: 800px;
+      padding: 3rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--accent-solid);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      font-size: 1.125rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      padding: 1.5rem;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-5px);
+    }
+
+    .feature-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-glow"></div>
+
+  <main>
+    <span class="badge">Vercel Serverless</span>
+    <h1>AI Content Agent</h1>
+    <p>A fully autonomous, serverless system that curates, translates, and publishes cutting-edge science and tech news for the Myanmar audience daily.</p>
+    
+    <div class="features">
+      <div class="feature-card">
+        <h3>🧠 Autonomous</h3>
+        <p>Powered by Gemini 3 Flash to intelligently research and summarize complex topics.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⏱️ Automated</h3>
+        <p>Triggered automatically via Vercel Cron at 5:00 AM and 11:30 AM (UTC) daily.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🚀 Native Delivery</h3>
+        <p>Seamlessly integrated with the Telegram Bot API for instant, beautifully formatted posts.</p>
+      </div>
+    </div>
+
+    <div class="status">
+      <div class="dot"></div>
+      Systems Operational & Ready
+    </div>
+  </main>
+</body>
+</html>

@@ -36,7 +36,9 @@ export default async function handler(
     const config = loadEnvConfig();
 
     const newsService = new GoogleNewsRssService();
-    const geminiService = new GeminiService(config.geminiApiKey, newsService);
+    // Select a random API key to distribute the load across multiple free tier keys
+    const randomKey = config.geminiApiKeys[Math.floor(Math.random() * config.geminiApiKeys.length)];
+    const geminiService = new GeminiService(randomKey, newsService);
     const telegramService = new TelegramService(
       config.telegramBotToken,
       config.telegramChatId
