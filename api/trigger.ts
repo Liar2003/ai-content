@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { loadEnvConfig } from '../src/config/env';
 import { GeminiService } from '../src/services/GeminiService';
+import { GoogleNewsRssService } from '../src/services/NewsService';
 import { TelegramService } from '../src/services/TelegramService';
 import { AgentController } from '../src/controllers/AgentController';
 
@@ -34,7 +35,8 @@ export default async function handler(
     // ─── Composition Root (Dependency Injection) ────────────────
     const config = loadEnvConfig();
 
-    const geminiService = new GeminiService(config.geminiApiKey);
+    const newsService = new GoogleNewsRssService();
+    const geminiService = new GeminiService(config.geminiApiKey, newsService);
     const telegramService = new TelegramService(
       config.telegramBotToken,
       config.telegramChatId
